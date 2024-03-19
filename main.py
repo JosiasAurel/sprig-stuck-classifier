@@ -4,10 +4,9 @@ from openai import OpenAI
 import requests
 from dotenv import load_dotenv
 from typing import List
-from pprint import pprint
 
 # importing sample code to avoid polluting the code
-from sample import code_1, errors_1
+from sample import code_1, errors_1, code_2, errors_2
 
 # load environment variables
 load_dotenv()
@@ -91,11 +90,18 @@ def get_code_blocks(source: str, delimiter: str = "```") -> List[str]:
   return results
 
 
-gpt_assitant = ChatGPTAssistant(OPENAI_API_KEY)
+gpt_assistant = ChatGPTAssistant(OPENAI_API_KEY)
 
 # completion = gpt_assitant.chat_completion("How do I create a new level in Sprig?")
-code_prompt = gpt_assitant.build_code_prompt(code_1, errors_1)
-completion = gpt_assitant.chat_completion(code_prompt)
+code_prompt = gpt_assistant.build_code_prompt(code_1, errors_1)
+completion = gpt_assistant.chat_completion(code_prompt)
+
+codes = get_code_blocks(completion)
+# print(codes[-1])
+
+# testing with code sample #2
+code_prompt = gpt_assistant.build_code_prompt(code_2, errors_2) 
+completion = gpt_assistant.chat_completion(code_prompt)
 
 codes = get_code_blocks(completion)
 print(codes[-1])
