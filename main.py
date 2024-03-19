@@ -56,7 +56,7 @@ class ChatGPTAssistant:
     return assistant_completion
 
   def build_code_prompt(self, code: str, error_logs: str = ""): 
-    prompt = "Here is a piece of code: " + f"\n ```\n{code} \n```" + "\n it is showing me these errors" + f"\n```\n{error_logs} \n ```" + "\n identify the issue in the code and suggest a fix"
+    prompt = "Here is a piece of code: " + f"\n ```\n{code} \n```" + "\n it is showing me these errors" + f"\n```\n{error_logs} \n ```" + "\n identify the issue in the code and suggest a fix. write the full code with the issue fixed."
     return prompt
 
   @staticmethod
@@ -78,16 +78,16 @@ at even number indices.
 
 So, we can get only the text at those indices knowing that it's a block of code from the completion.
 
-We then slice away the first two characters from the text as they're usually the language specifier.
+We then slice away the text upto the first new line as they're usually the language specifier.
 
-Other languages will have longer language specifiers but in our case, js, is only two characters.
 """
 def get_code_blocks(source: str, delimiter: str = "```") -> List[str]:
   results = []
   for i, x in enumerate(source.split(delimiter)):
     if (i+1) % 2 != 0: continue
-    # x[2:] to remove the dangling language specifier 
-    results.append(x[2:])
+    # remove the dangling language specifier 
+    first_newline = x.find("\n")
+    results.append(x[first_newline+1:])
   return results
 
 
@@ -97,4 +97,5 @@ gpt_assitant = ChatGPTAssistant(OPENAI_API_KEY)
 code_prompt = gpt_assitant.build_code_prompt(code_1, errors_1)
 completion = gpt_assitant.chat_completion(code_prompt)
 
-print(get_code_blocks(completion))
+codes = get_code_blocks(completion)
+print(codes[-1])
