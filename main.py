@@ -54,6 +54,7 @@ class ChatGPTAssistant:
     # return the assitant completion to the user if they want to use it for anything whatsoever
     return assistant_completion
 
+  @staticmethod
   def build_code_prompt(self, code: str, error_logs: str = ""): 
     prompt = "Here is a piece of code: " + f"\n ```\n{code} \n```" + "\n it is showing me these errors" + f"\n```\n{error_logs} \n ```" + "\n identify the issue in the code and suggest a fix. write the full code with the issue fixed."
     return prompt
@@ -91,17 +92,3 @@ def get_code_blocks(source: str, delimiter: str = "```") -> List[str]:
 
 
 gpt_assistant = ChatGPTAssistant(OPENAI_API_KEY)
-
-# completion = gpt_assitant.chat_completion("How do I create a new level in Sprig?")
-code_prompt = gpt_assistant.build_code_prompt(code_1, errors_1)
-completion = gpt_assistant.chat_completion(code_prompt)
-
-codes = get_code_blocks(completion)
-# print(codes[-1])
-
-# testing with code sample #2
-code_prompt = gpt_assistant.build_code_prompt(code_2, errors_2) 
-completion = gpt_assistant.chat_completion(code_prompt)
-
-codes = get_code_blocks(completion)
-print(codes[-1])
